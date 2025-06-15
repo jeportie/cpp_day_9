@@ -11,13 +11,22 @@
 /* ************************************************************************** */
 
 
+#include <string>
+#include <fstream>
 #include <iostream>
-#include <ostream>
+#include <stdexcept>
+
 #include "BitcoinExchange.hpp"
 
 BitcoinExchange::BitcoinExchange(void)
 {
 	std::cout << "[BitcoinExchange] - default constructor called - " << std::endl;
+}
+
+BitcoinExchange::BitcoinExchange(char *av)
+{
+	processFile(av);
+	std::cout << "[BitcoinExchange] - parametric constructor called - " << std::endl;
 }
 
 BitcoinExchange::BitcoinExchange(const BitcoinExchange& src)
@@ -36,9 +45,44 @@ BitcoinExchange::~BitcoinExchange(void)
 BitcoinExchange & BitcoinExchange::operator=(const BitcoinExchange& rhs)
 {
 	std::cout << "[BitcoinExchange] - copy assignment operator called - " << std::endl;
+	(void) rhs;
 //	if (this != &rhs)
 //		this->_foo = rhs.getFoo();
 	return (*this);
+}
+
+void BitcoinExchange::processFile(char *av)
+{
+	std::ifstream	file(av);
+	std::string		line;
+
+	if (!file)
+		throw std::runtime_error("Error opening file!");
+
+	getline(file, line);
+	if (line.find("date,exchange_rate") == std::string::npos)
+		throw std::runtime_error("First line should be : date,exchange_rate"); 
+
+	while (getline(file, line))
+	{
+		parseLine(line);
+		std::cout << "Processing line: " << line << "..." << std::endl;
+	}
+	file.close();
+}
+
+void BitcoinExchange::parseLine(std::string line)
+{
+	size_t comaPosition;
+	std::string date;
+	std::string rate;
+
+	comaPosition = line.find(",");
+	if (comaPosition == std::string::npos)
+		throw std::runtime_error("Line does not contain a coma.");
+
+	date = line.substr(0, comaPosition);
+	rate = line.substr(comaPosition + 1);
 }
 
 //std::ostream & operator<<(std::ostream & out, const BitcoinExchange& in)

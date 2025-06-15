@@ -12,7 +12,7 @@
 
 NAME = btc 
 CXX = c++
-CXXFLAGS = -Wall -Wextra -Werror -std=c++98
+CXXFLAGS = -Wall -Wextra -Werror -std=c++98 --debug
 VALFLAGS = --leak-check=full
 OUTDIR = bin
 SRCDIR = src
@@ -23,7 +23,7 @@ ARGS=$(filter-out $@,$(MAKECMDGOALS))
 #### BEGIN AUTO GENERATED FILES ###
 # List of source files:
 SRC = \
-
+  src/class/BitcoinExchange.cpp 
 #### END AUTO GENERATED FILES ###
 
 # Create object for main.cpp

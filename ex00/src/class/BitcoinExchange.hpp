@@ -11,20 +11,29 @@
 /* ************************************************************************** */
 
 #ifndef BITCOINEXCHANGE_HPP
-# define BITCOINEXCHANGE_HPP
+#define BITCOINEXCHANGE_HPP
 
-# include <iostream>
+#include <iostream>
+#include <map>
 
 class BitcoinExchange
 {
 public:
-	BitcoinExchange(void);
+	BitcoinExchange();
+	BitcoinExchange(char *av);
 	BitcoinExchange(const BitcoinExchange& src);
 	~BitcoinExchange(void);
 
 	BitcoinExchange& operator=(const BitcoinExchange& rhs);
 
+	void	processFile(char *av);
+	void	parseLine(std::string line);
+	bool	isValidDate(const std::string& date);
+	double	parseExchangeRate(const std::string& rateStr);
+
+
 private:
+	std::map<std::string, float>	_container;
 };
 
 // Overload operator<< for output streaming
