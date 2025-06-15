@@ -36,14 +36,12 @@ float parseValue(const std::string& value)
     return (result);
 }
 
-bool checkPipe(std::string line)
+bool checkPipe(std::string line, size_t& pipePosition)
 {
-    size_t      pipePosition;
-
 	pipePosition = line.find("|");
     if (pipePosition == std::string::npos)
     {
-        throw std::invalid_argument("Line does not contain a |.");
+        throw std::invalid_argument("Line does not contain a |");
     }
 	return (true);
 }
@@ -72,7 +70,7 @@ void runCalculator(char* av, BitcoinExchange* data)
     {
 		try
 		{
-			checkPipe(line);
+				checkPipe(line, pipePosition);
 		}
         catch (const std::invalid_argument& e)
         {
@@ -82,7 +80,7 @@ void runCalculator(char* av, BitcoinExchange* data)
 
         try
         {
-			date = isValidDate(line);
+			date = validateDate(line);
         }
         catch (const std::invalid_argument& e)
         {

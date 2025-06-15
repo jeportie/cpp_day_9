@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "class/BitcoinExchange.hpp"
 #include "../include/btc.hpp"
 #include <sstream>
 #include <stdexcept>
@@ -24,9 +23,9 @@ int isValidYear(const std::string& date)
     yearStr  = date.substr(0, 4);
     std::istringstream(yearStr) >> year;
 
-    if (year >= 2026)
+    if (year >= 2026) {
         throw std::invalid_argument("bad input => " + date);
-
+    }
 	return (year);
 }
 
@@ -37,9 +36,9 @@ int isValidMonth(const std::string& date)
 
     monthStr = date.substr(5, 2);
     std::istringstream(monthStr) >> month;
-    if (month < 1 || month > 12)
+    if (month < 1 || month > 12) {
         throw std::invalid_argument("bad input => " + date);
-
+    }
 	return (month);
 }
 
@@ -70,16 +69,18 @@ int isValidDay(const std::string& date, int month, bool isLeapYear)
 	return (day);
 }
 
-std::string isValidDate(const std::string& line)
+std::string validateDate(const std::string& line)
 {
     size_t      i;
     size_t      pipePosition;
     std::string date;
 	int			year;
 	int			month;
-	int			day;
 
-
+    pipePosition = line.find("|");
+    if (pipePosition == std::string::npos) {
+        throw std::invalid_argument("bad input => " + line);
+    }
 	date = line.substr(0, pipePosition);
 	date.erase(date.find_last_not_of(" \t") + 1);  // trim right
 	date.erase(0, date.find_first_not_of(" \t"));  // trim left
@@ -100,7 +101,7 @@ std::string isValidDate(const std::string& line)
 	month = isValidMonth(date);
     // Check if day is valid for the given month
     bool isLeapYear = (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
-	day = isValidDay(date, month, isLeapYear);
+	isValidDay(date, month, isLeapYear); // Just validate, don't need to store the result
     return (date);
 }
 

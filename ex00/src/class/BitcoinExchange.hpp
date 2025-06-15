@@ -28,7 +28,7 @@ public:
 
 	void	processFile(void);
 	void	parseLine(std::string line);
-	bool	isValidDate(const std::string& date);
+	bool	checkValidDate(const std::string& date);
 	float	parseRate(const std::string& rate);
 
 	float	getClosestRate(const std::string &date) const;
@@ -40,7 +40,6 @@ private:
 	std::map<std::string, float>	_container;
 };
 
-bool	isValidDate(const std::string& date);
 
 // Overload operator<< for output streaming
 std::ostream & operator<<(std::ostream& out, const BitcoinExchange& in);

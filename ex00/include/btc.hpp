@@ -18,6 +18,6 @@
 int isValidYear(const std::string& date);
 int isValidMonth(const std::string& date);
 int isValidDay(const std::string& date, int month, bool isLeapYear);
-std::string isValidDate(const std::string& line);
+std::string validateDate(const std::string& line);
 
 #endif  // ********************************************************** BTC_HPP //

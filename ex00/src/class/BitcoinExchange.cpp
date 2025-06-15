@@ -79,7 +79,7 @@ void BitcoinExchange::parseLine(std::string line)
 		throw std::runtime_error("Line does not contain a coma.");
 
 	date = line.substr(0, comaPosition);
-	isValidDate(date);
+	checkValidDate(date);
 	rate = line.substr(comaPosition + 1);
 	convertedRate = parseRate(rate);
 	_container[date] = convertedRate;
@@ -110,9 +110,19 @@ float	BitcoinExchange::getClosestRate(const std::string &date) const
 	return (it->second); 
 }
 
-bool BitcoinExchange::isValidDate(const std::string& date)
+bool BitcoinExchange::checkValidDate(const std::string& date)
 {
-	return ::isValidDate(date);
+    // Just do basic validation here since validateDate is for a different purpose
+    if (date.size() != 10)
+        return false;
+    if (date[4] != '-' || date[7] != '-')
+        return false;
+    
+    for (size_t i = 0; i < date.size(); i++) {
+        if (i != 4 && i != 7 && !isdigit(date[i]))
+            return false;
+    }
+    return true;
 }
 
 void BitcoinExchange::printMap(void) const
