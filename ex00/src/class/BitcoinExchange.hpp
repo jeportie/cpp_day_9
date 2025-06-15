@@ -29,7 +29,10 @@ public:
 	void	processFile(void);
 	void	parseLine(std::string line);
 	bool	isValidDate(const std::string& date);
-	double	parseRate(const std::string& rate);
+	float	parseRate(const std::string& rate);
+
+	float	getClosestRate(const std::string &date) const;
+	void	printMap(void) const;
 
 
 private:

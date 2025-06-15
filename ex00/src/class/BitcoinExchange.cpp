@@ -12,6 +12,7 @@
 
 
 #include <cctype>
+#include <ostream>
 #include <string>
 #include <fstream>
 #include <sstream>
@@ -44,14 +45,12 @@ BitcoinExchange & BitcoinExchange::operator=(const BitcoinExchange& rhs)
 {
 	std::cout << "[BitcoinExchange] - copy assignment operator called - " << std::endl;
 	(void) rhs;
-//	if (this != &rhs)
-//		this->_foo = rhs.getFoo();
 	return (*this);
 }
 
 void BitcoinExchange::processFile(void)
 {
-	std::ifstream	file(_dbPath);
+	std::ifstream	file(_dbPath.c_str());
 	std::string		line;
 
 	if (!file)
@@ -86,7 +85,7 @@ void BitcoinExchange::parseLine(std::string line)
 	_container[date] = convertedRate;
 }
 
-double	BitcoinExchange::parseRate(const std::string& rate)
+float BitcoinExchange::parseRate(const std::string& rate)
 {
 	std::istringstream	ss(rate);
 	double				result;
@@ -97,9 +96,40 @@ double	BitcoinExchange::parseRate(const std::string& rate)
 	return (result);
 }
 
-//std::ostream & operator<<(std::ostream & out, const BitcoinExchange& in)
-//{
-	//out << "The value of _foo is : " << in.getFoo();
-	//return (out);
-//}
+float	BitcoinExchange::getClosestRate(const std::string &date) const
+{
+	std::map<std::string, float>::const_iterator it;
+
+	it = _container.lower_bound(date);
+	if (it != _container.end() && it->first == date)
+		return (it->second);
+	// std::cout << it->first << std::endl;
+	if (it == _container.begin())
+		return (it->second);
+	--it;
+	return (it->second); 
+}
+
+bool BitcoinExchange::isValidDate(const std::string& date)
+{
+	return ::isValidDate(date);
+}
+
+void BitcoinExchange::printMap(void) const
+{
+	std::map<std::string, float>::const_iterator	it;
+
+	it = _container.begin();
+	while (it != _container.end())
+	{
+		std::cout << it->first << "|" << it->second << std::endl;
+		++it;
+	}
+}
+
+std::ostream & operator<<(std::ostream & out, const BitcoinExchange& in)
+{
+	in.printMap();
+	return (out);
+}
 
