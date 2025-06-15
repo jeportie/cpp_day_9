@@ -15,26 +15,29 @@
 
 #include <iostream>
 #include <map>
+#include <string>
 
 class BitcoinExchange
 {
 public:
 	BitcoinExchange();
-	BitcoinExchange(char *av);
 	BitcoinExchange(const BitcoinExchange& src);
 	~BitcoinExchange(void);
 
 	BitcoinExchange& operator=(const BitcoinExchange& rhs);
 
-	void	processFile(char *av);
+	void	processFile(void);
 	void	parseLine(std::string line);
 	bool	isValidDate(const std::string& date);
-	double	parseExchangeRate(const std::string& rateStr);
+	double	parseRate(const std::string& rate);
 
 
 private:
+	std::string						_dbPath;
 	std::map<std::string, float>	_container;
 };
+
+bool	isValidDate(const std::string& date);
 
 // Overload operator<< for output streaming
 std::ostream & operator<<(std::ostream& out, const BitcoinExchange& in);
