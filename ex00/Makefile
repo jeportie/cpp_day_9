@@ -24,7 +24,8 @@ ARGS=$(filter-out $@,$(MAKECMDGOALS))
 # List of source files:
 SRC = \
   src/class/BitcoinExchange.cpp \
-  src/isValidDate.cpp 
+  src/isValidDate.cpp \
+  src/parseInput.cpp 
 #### END AUTO GENERATED FILES ###
 
 # Create object for main.cpp

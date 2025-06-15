@@ -20,6 +20,7 @@
 #include <stdexcept>
 
 #include "BitcoinExchange.hpp"
+#include "../../include/btc.hpp"
 
 BitcoinExchange::BitcoinExchange(void)
 {
@@ -112,16 +113,26 @@ float	BitcoinExchange::getClosestRate(const std::string &date) const
 
 bool BitcoinExchange::checkValidDate(const std::string& date)
 {
-    // Just do basic validation here since validateDate is for a different purpose
+    size_t      i;
+    int         year;
+    int         month;
+
     if (date.size() != 10)
-        return false;
+        throw std::invalid_argument("bad input => " + date);
     if (date[4] != '-' || date[7] != '-')
-        return false;
-    
-    for (size_t i = 0; i < date.size(); i++) {
+        throw std::invalid_argument("bad input => " + date);
+    i = 0;
+    while (i < date.size())
+    {
         if (i != 4 && i != 7 && !isdigit(date[i]))
-            return false;
+            throw std::invalid_argument("bad input => " + date);
+        i++;
     }
+    year  = isValidYear(date);
+    month = isValidMonth(date);
+    // Check if day is valid for the given month
+    bool isLeapYear = (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+    isValidDay(date, month, isLeapYear);  // Just validate, don't need to store the result
     return true;
 }
 
