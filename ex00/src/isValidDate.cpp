@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../include/btc.hpp"
+#include <cstddef>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -72,19 +73,13 @@ int isValidDay(const std::string& date, int month, bool isLeapYear)
     return (day);
 }
 
-std::string validateDate(const std::string& line)
+std::string validateDate(const std::string& line, size_t& pipePosition)
 {
     size_t      i;
-    size_t      pipePosition;
     std::string date;
     int         year;
     int         month;
 
-    pipePosition = line.find("|");
-    if (pipePosition == std::string::npos)
-    {
-        throw std::invalid_argument("bad input => " + line);
-    }
     date = line.substr(0, pipePosition);
     date.erase(date.find_last_not_of(" \t") + 1);  // trim right
     date.erase(0, date.find_first_not_of(" \t"));  // trim left

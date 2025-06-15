@@ -19,11 +19,16 @@
 #include <exception>
 #include <stdexcept>
 
-float parseValue(const std::string& value)
+float parseValue(const std::string& line, size_t& pipePosition)
 {
-    std::istringstream ss(value);
+    std::string		   value;
     float              result;
 
+    value = line.substr(pipePosition + 1);
+    value.erase(value.find_last_not_of(" \t") + 1);
+    value.erase(0, value.find_first_not_of(" \t"));
+
+    std::istringstream ss(value);
     if (value.size() > 4)
         throw std::invalid_argument(("too large number"));
     ss >> result;
@@ -80,7 +85,7 @@ void runCalculator(char* av, BitcoinExchange* data)
 
         try
         {
-            date = validateDate(line);
+            date = validateDate(line, pipePosition);
         }
         catch (const std::invalid_argument& e)
         {
@@ -88,18 +93,16 @@ void runCalculator(char* av, BitcoinExchange* data)
             continue;
         }
 
-        value = line.substr(pipePosition + 1);
-        value.erase(value.find_last_not_of(" \t") + 1);
-        value.erase(0, value.find_first_not_of(" \t"));
         try
         {
-            fvalue = parseValue(value);
+            fvalue = parseValue(value, pipePosition);
         }
         catch (const std::invalid_argument& e)
         {
             std::cerr << "Error: " << e.what() << "." << std::endl;
             continue;
         }
+
         rate   = data->getClosestRate(date);
         result = fvalue * rate;
         std::cout << date << " => " << fvalue << " = " << result << std::endl;
