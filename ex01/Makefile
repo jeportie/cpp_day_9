@@ -10,7 +10,7 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME = btc 
+NAME = RPN 
 CXX = c++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98 --debug
 VALFLAGS = --leak-check=full
@@ -23,9 +23,7 @@ ARGS=$(filter-out $@,$(MAKECMDGOALS))
 #### BEGIN AUTO GENERATED FILES ###
 # List of source files:
 SRC = \
-  src/class/BitcoinExchange.cpp \
-  src/isValidDate.cpp \
-  src/parseInput.cpp 
+  src/class/RPN.cpp 
 #### END AUTO GENERATED FILES ###
 
 # Create object for main.cpp
