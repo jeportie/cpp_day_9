@@ -6,7 +6,7 @@
 /*   By: jeportie <jeportie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 16:27:05 by jeportie          #+#    #+#             */
-/*   Updated: 2025/06/13 16:27:07 by jeportie         ###   ########.fr       */
+/*   Updated: 2025/06/16 07:50:51 by jeportie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ public:
 
 	float	getClosestRate(const std::string &date) const;
 	void	printMap(void) const;
+
+	const std::string& getDbPath(void);
 
 
 private:

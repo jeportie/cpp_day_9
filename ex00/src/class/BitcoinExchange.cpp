@@ -6,7 +6,7 @@
 /*   By: jeportie <jeportie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 16:27:13 by jeportie          #+#    #+#             */
-/*   Updated: 2025/06/13 16:27:15 by jeportie         ###   ########.fr       */
+/*   Updated: 2025/06/16 07:51:00 by jeportie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,8 @@ void BitcoinExchange::printMap(void) const
 		++it;
 	}
 }
+
+const std::string& BitcoinExchange::getDbPath(void) { return (_dbPath); }
 
 std::ostream & operator<<(std::ostream & out, const BitcoinExchange& in)
 {
