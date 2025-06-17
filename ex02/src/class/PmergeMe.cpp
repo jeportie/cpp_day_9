@@ -6,7 +6,7 @@
 /*   By: jeportie <jeportie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 14:35:36 by jeportie          #+#    #+#             */
-/*   Updated: 2025/06/16 15:50:10 by jeportie         ###   ########.fr       */
+/*   Updated: 2025/06/17 09:47:12 by jeportie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <iomanip>
 
 #include "PmergeMe.hpp"
+#include "../template/printContainer.hpp"
 
 PmergeMe::PmergeMe(void)
 : _dataVector()
@@ -73,15 +74,17 @@ void PmergeMe::validateArg(char *av)
 
 void PmergeMe::parseAndPush(char *av)
 {
-	std::cout << "we are here" << av << std::endl;
+	std::cout << av << std::endl;
 	validateArg(av);
-	
+
 	_dataVector.push_back(std::atoi(av));
 	_dataDeque.push_back(std::atoi(av));
 }
 
 void PmergeMe::runFordJohnson(void)
 {
+	printContainer(_dataVector);
+	printContainer(_dataDeque);
 	struct timeval startTime, endTime;
 
     gettimeofday(&startTime, NULL);

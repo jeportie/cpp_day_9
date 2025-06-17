@@ -29,6 +29,7 @@ public:
 	void validateArg(char *av);
 	void runFordJohnson(void);
 
+
 private:
     std::vector<int>	_dataVector;
     std::deque<int>		_dataDeque;
@@ -36,5 +37,11 @@ private:
 	double				_timeVector;
 	double				_timeDeque;
 };
+
+template <typename T>
+void fjsort(T container)
+{
+
+}
 
 #endif  // ***************************************************** PMERGEME_HPP //
