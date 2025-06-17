@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fjsort.hpp                                         :+:      :+:    :+:   */
+/*   fjsort.tpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeportie <jeportie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FJSORT_HPP
-# define FJSORT_HPP
+#ifndef FJSORT_TPP
+# define FJSORT_TPP
 
 #include <cstddef>
 #include <iterator>
@@ -20,25 +20,11 @@
 #include <vector>
 #include <climits>
 
+#define PAIR_II		std::pair<int,int>
 #define VPAIR_II	std::vector< std::pair<int, int> >
 #define VECT_I		std::vector<int>
 #define VECT_SIZE	std::vector<size_t>
 
-static std::vector<size_t> generateInsertOrder(size_t totalPairs);
-
-// Étape 1 : Former des paires (valeur_min, valeur_max) à partir du conteneur initial.
-// Retourne un vector de paires triées en interne (le plus petit d'abord, le plus grand ensuite).
-//
-// Étape 2 : Trier le vector de paires en fonction de la valeur du second élément (le maximum de chaque paire).
-//
-// Étape 3 : générer l'ordre d'insertion des petits éléments selon la suite de Jacobsthal.
-// totalPairs correspond au nombre total de paires formées (y compris la paire sentinel si présente).
-//
-// Étape 4 : Insérer les éléments "en attente" (petits éléments des paires) dans la chaîne principale selon l'ordre déterminé.
-//
-// Étape 5 : gérer l'élément impair non apparié (s'il y en avait un, il est représenté par INT_MAX dans la dernière paire)
-
-/* @biref Fonction de recherche dichotomique générique (pour insérer au bon endroit) */
 template<typename Iter, typename T>
 Iter binarySearch(Iter begin, Iter end, const T& value)
 {
@@ -90,10 +76,9 @@ VPAIR_II sortInPairs(const Container& data)
 	return (pairs);
 }
 
-template <typename Pair>
-bool comparePairBySecond(Pair& a, Pair& b)
+inline bool comparePairBySecond(const PAIR_II& a, const PAIR_II& b)
 {
-	return (a.second < b.second);
+  return (a.second < b.second);
 }
 
 template <typename PairContainer>
@@ -132,6 +117,66 @@ void sortPairsByMaxBubble(PairContainer& pairs)
     }
 }
 
+// Fonction auxiliaire : générer l'ordre d'insertion des petits éléments selon
+// la suite de Jacobsthal. totalPairs correspond au nombre total de paires
+// formées (y compris la paire sentinel si présente).
+
+inline std::vector<size_t> generateInsertOrder(size_t totalPairs)
+{
+    std::vector<size_t> orderIndices;
+    std::vector<size_t> jacob;
+	size_t				sortedIndex;
+	size_t				indexLimit;
+	size_t				next;
+	size_t				i;
+	size_t				j;
+
+    if (totalPairs <= 1)
+        return (orderIndices);
+
+    // Générer la suite de Jacobsthal jusqu'à dépasser totalPairs
+    jacob.push_back(3);  // J(2) = 3
+    jacob.push_back(5);  // J(3) = 5
+
+    // Génération itérative : J(n) = J(n-1) + 2 * J(n-2)
+	j = 2;
+    while (true)
+    {
+        next = jacob[j - 1] + 2 * jacob[j - 2];
+        if (next <= totalPairs)
+            jacob.push_back(next);
+        else
+            break ;
+
+		j++;
+    }
+
+    // Utiliser la suite de Jacobsthal pour déterminer l'ordre d'insertion
+    sortedIndex = 0;
+	j = 0;
+    while (j < jacob.size() && jacob[j] <= totalPairs)
+    {
+        indexLimit = jacob[j] - 1;  // on insérera jusqu'à l'indice (jacob[j] - 1)
+		i = indexLimit;
+        while (i > sortedIndex)
+        {
+            orderIndices.push_back(i);
+			i--;
+        }
+        sortedIndex = indexLimit;
+		j++;
+    }
+    // Insérer le reste des indices qui n'auraient pas été couverts par la suite de Jacobsthal
+    for (size_t k = 0; k < totalPairs; ++k)
+    {
+        if (std::find(orderIndices.begin(), orderIndices.end(), k) == orderIndices.end())
+        {
+            orderIndices.push_back(k);
+        }
+    }
+    return (orderIndices);
+}
+
 template <typename Container>
 void insertElements(Container& mainChain, const VECT_I& pending, const VECT_SIZE& insertOrder)
 {
@@ -144,12 +189,12 @@ void insertElements(Container& mainChain, const VECT_I& pending, const VECT_SIZE
 	while (i < insertOrder.size())
 	{
 		idx = insertOrder[i];
+		++i;
 		if (idx >= pending.size())
 			continue ;
 		value = pending[idx];
 		pos = binarySearch(mainChain.begin(), mainChain.end(), value);
 		mainChain.insert(pos, value);
-		i++;
 	}
 }
 
@@ -163,11 +208,20 @@ void fjsort(Container& container)
 	VPAIR_II						pairs;
 	size_t							i;
 	int								lastValue;
+	bool							isOdd;
 
 	if (container.size() < 2)
 		return ;
+	isOdd = false;
 	pairs = sortInPairs(container);
 	sortPairsByMax(pairs);
+
+    if (!pairs.empty() && pairs.back().second == INT_MAX)
+	{
+        isOdd = true;  
+        lastValue   = pairs.back().first;
+        pairs.pop_back();
+    }
 	
 	if (!pairs.empty())
 	{
@@ -190,12 +244,11 @@ void fjsort(Container& container)
 		i++;
 	}
 
-	insertOrder = generateInsertOrder(pairs.size());
+	insertOrder = generateInsertOrder(pendingElements.size());
 	insertElements(mainChain, pendingElements, insertOrder);
 
-	if (!pairs.empty()) // for odd number of elements in container
+	if (isOdd) // for odd number of elements in container
 	{
-		lastValue = pairs.back().first;	
 		pos = binarySearch(mainChain.begin(), mainChain.end(), lastValue);
 		mainChain.insert(pos, lastValue);
 	}
@@ -203,4 +256,34 @@ void fjsort(Container& container)
 	container = mainChain;
 }
 
-#endif  // ******************************************************* FJSORT_HPP //
+// template <typename PairContainer>
+// void sortPairsByMaxBubble(PairContainer& pairs)
+// {
+//     typename PairContainer::size_type i;
+//     typename PairContainer::size_type j;
+//     typename PairContainer::size_type size = pairs.size();
+//     bool swapped;
+//
+//     j = 0;
+//     while (j + 1 < size)
+//     {
+//         swapped = false;
+//         i = 0;
+//         while (i + 1 < size - j)
+//         {
+//             if (pairs[i].second > pairs[i + 1].second)
+//             {
+//                 std::pair<int, int> tmp = pairs[i];
+//                 pairs[i] = pairs[i + 1];
+//                 pairs[i + 1] = tmp;
+//                 swapped = true;
+//             }
+//             ++i;
+//         }
+//         if (!swapped)
+//             break;
+//         ++j;
+//     }
+// }
+
+#endif  // ******************************************************* FJSORT_TPP //

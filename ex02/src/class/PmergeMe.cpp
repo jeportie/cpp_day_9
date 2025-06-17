@@ -19,8 +19,8 @@
 #include <iomanip>
 
 #include "PmergeMe.hpp"
-#include "../template/printContainer.hpp"
-#include "../template/fjsort.hpp"
+#include "../template/printContainer.tpp"
+#include "../template/fjsort.tpp"
 
 PmergeMe::PmergeMe(void)
 : _dataVector()
@@ -89,8 +89,8 @@ void PmergeMe::runFordJohnson(void)
 	long			seconds;
 	long			microseconds;
 
+	std::cout << "Before Vector: ";
 	printContainer(_dataVector);
-	printContainer(_dataDeque);
 
     gettimeofday(&startTime, NULL);
     fjsort(_dataVector); 
@@ -99,13 +99,24 @@ void PmergeMe::runFordJohnson(void)
     microseconds = endTime.tv_usec - startTime.tv_usec;
     _timeVector = seconds * 1e6 + microseconds;
 
+	std::cout << "After Vector:  ";
+	printContainer(_dataVector);
+
+	std::cout << "Before Deque:  ";
+	printContainer(_dataVector);
     gettimeofday(&startTime, NULL);
     fjsort(_dataDeque); 
     gettimeofday(&endTime, NULL);
     seconds = endTime.tv_sec - startTime.tv_sec;
     microseconds = endTime.tv_usec - startTime.tv_usec;
     _timeDeque = seconds * 1e6 + microseconds;
+	std::cout << "After Deque:   ";
+	printContainer(_dataVector);
 
-    std::cout << std::fixed << std::setprecision(5) << _timeVector << " us" << std::endl;
-    std::cout << std::fixed << std::setprecision(5) << _timeDeque << " us" << std::endl;
+    std::cout	<< "Time to process a range of: " << _dataVector.size() 
+				<< " Vector elements: " << std::fixed << std::setprecision(5)
+				<< _timeVector << " us" << std::endl;
+    std::cout	<< "Time to process a range of: " << _dataVector.size() 
+				<< " Deque  elements: " << std::fixed << std::setprecision(5)
+				<< _timeDeque << " us" << std::endl;
 }

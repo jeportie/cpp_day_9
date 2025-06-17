@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   printContainer.hpp                                 :+:      :+:    :+:   */
+/*   printContainer.tpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeportie <jeportie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PRINTCONTAINER_HPP
-# define PRINTCONTAINER_HPP
+#ifndef PRINTCONTAINER_TPP
+# define PRINTCONTAINER_TPP
 
 #include <iostream>
 
@@ -37,4 +37,4 @@ void printContainer(const T& container)
     std::cout << "]" << std::endl;
 }
 
-#endif  // *********************************************** PRINTCONTAINER_HPP //
+#endif  // *********************************************** PRINTCONTAINER_TPP //

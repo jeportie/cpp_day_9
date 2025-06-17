@@ -23,8 +23,7 @@ ARGS=$(filter-out $@,$(MAKECMDGOALS))
 #### BEGIN AUTO GENERATED FILES ###
 # List of source files:
 SRC = \
-  src/class/PmergeMe.cpp \
-  src/fjsort.cpp 
+  src/class/PmergeMe.cpp 
 #### END AUTO GENERATED FILES ###
 
 # Create object for main.cpp
