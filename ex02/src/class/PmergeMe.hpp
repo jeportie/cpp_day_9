@@ -6,7 +6,7 @@
 /*   By: jeportie <jeportie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 14:35:38 by jeportie          #+#    #+#             */
-/*   Updated: 2025/06/16 15:49:50 by jeportie         ###   ########.fr       */
+/*   Updated: 2025/06/17 11:37:50 by jeportie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,5 @@ private:
 	double				_timeVector;
 	double				_timeDeque;
 };
-
-template <typename T>
-void fjsort(T container)
-{
-
-}
 
 #endif  // ***************************************************** PMERGEME_HPP //
