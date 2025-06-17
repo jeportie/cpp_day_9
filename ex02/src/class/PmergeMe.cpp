@@ -89,7 +89,7 @@ void PmergeMe::runFordJohnson(void)
 	long			seconds;
 	long			microseconds;
 
-	std::cout << "Before Vector: ";
+	std::cout << "Before Sort: ";
 	printContainer(_dataVector);
 
     gettimeofday(&startTime, NULL);
@@ -99,19 +99,16 @@ void PmergeMe::runFordJohnson(void)
     microseconds = endTime.tv_usec - startTime.tv_usec;
     _timeVector = seconds * 1e6 + microseconds;
 
-	std::cout << "After Vector:  ";
+	std::cout << "After Sort:  ";
 	printContainer(_dataVector);
 
-	std::cout << "Before Deque:  ";
-	printContainer(_dataVector);
     gettimeofday(&startTime, NULL);
     fjsort(_dataDeque); 
     gettimeofday(&endTime, NULL);
     seconds = endTime.tv_sec - startTime.tv_sec;
     microseconds = endTime.tv_usec - startTime.tv_usec;
     _timeDeque = seconds * 1e6 + microseconds;
-	std::cout << "After Deque:   ";
-	printContainer(_dataVector);
+
 
     std::cout	<< "Time to process a range of: " << _dataVector.size() 
 				<< " Vector elements: " << std::fixed << std::setprecision(5)
