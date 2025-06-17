@@ -12,6 +12,9 @@
 
 #include "src/class/PmergeMe.hpp"
 
+#include <iostream>
+#include <stdexcept>
+
 int main(int ac, char **av)
 {
 	if (ac == 1)
@@ -19,18 +22,22 @@ int main(int ac, char **av)
 		std::cerr << "Usage: " << av[0] << " + <args_to_sort>" << std::endl;
 		return (1);
 	}
-
 	try
 	{
 		int			i;
 		PmergeMe	setup;
 
-		i = 0;
+		i = 1;
 		while (i < (ac - 1))
 		{
 			setup.parseAndPush(av[i]);
 			i++;
 		}
+		setup.runFordJohnson();
+	}
+	catch (const std::invalid_argument& e)
+	{
+		std::cerr << "Argument Error: " << e.what() << std::endl;
 	}
 	catch (...)
 	{

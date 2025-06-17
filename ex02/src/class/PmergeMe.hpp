@@ -13,7 +13,6 @@
 #ifndef PMERGEME_HPP
 #define PMERGEME_HPP
 
-#include <iostream>
 #include <deque>
 #include <vector>
 
@@ -28,13 +27,14 @@ public:
 
 	void parseAndPush(char *av);
 	void validateArg(char *av);
+	void runFordJohnson(void);
 
 private:
-    std::vector<int> _dataVector;
-    std::deque<int>  _dataDeque;
-};
+    std::vector<int>	_dataVector;
+    std::deque<int>		_dataDeque;
 
-// Overload operator<< for output streaming
-std::ostream& operator<<(std::ostream& out, const PmergeMe& in);
+	double				_timeVector;
+	double				_timeDeque;
+};
 
 #endif  // ***************************************************** PMERGEME_HPP //
