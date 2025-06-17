@@ -20,6 +20,7 @@
 
 #include "PmergeMe.hpp"
 #include "../template/printContainer.hpp"
+#include "../template/fjsort.hpp"
 
 PmergeMe::PmergeMe(void)
 : _dataVector()
@@ -65,6 +66,7 @@ void PmergeMe::validateArg(char *av)
 			std::cout << av[i] << std::endl;
 			throw std::invalid_argument(("Should be a number"));
 		}
+
 		i++;
 	}
 	if (i > 10)
@@ -74,7 +76,6 @@ void PmergeMe::validateArg(char *av)
 
 void PmergeMe::parseAndPush(char *av)
 {
-	std::cout << av << std::endl;
 	validateArg(av);
 
 	_dataVector.push_back(std::atoi(av));
@@ -83,17 +84,28 @@ void PmergeMe::parseAndPush(char *av)
 
 void PmergeMe::runFordJohnson(void)
 {
+	struct timeval	startTime;
+	struct timeval	endTime;
+	long			seconds;
+	long			microseconds;
+
 	printContainer(_dataVector);
 	printContainer(_dataDeque);
-	struct timeval startTime, endTime;
 
     gettimeofday(&startTime, NULL);
-    usleep(500);  // Run sorting algo here 
+    fjsort(_dataVector); 
     gettimeofday(&endTime, NULL);
+    seconds = endTime.tv_sec - startTime.tv_sec;
+    microseconds = endTime.tv_usec - startTime.tv_usec;
+    _timeVector = seconds * 1e6 + microseconds;
 
-    long seconds = endTime.tv_sec - startTime.tv_sec;
-    long microseconds = endTime.tv_usec - startTime.tv_usec;
-    double durationMs = seconds * 1e6 + microseconds;  // Convert to microseconds
+    gettimeofday(&startTime, NULL);
+    fjsort(_dataDeque); 
+    gettimeofday(&endTime, NULL);
+    seconds = endTime.tv_sec - startTime.tv_sec;
+    microseconds = endTime.tv_usec - startTime.tv_usec;
+    _timeDeque = seconds * 1e6 + microseconds;
 
-    std::cout << std::fixed << std::setprecision(5) << durationMs << " us" << std::endl;
+    std::cout << std::fixed << std::setprecision(5) << _timeVector << " us" << std::endl;
+    std::cout << std::fixed << std::setprecision(5) << _timeDeque << " us" << std::endl;
 }
