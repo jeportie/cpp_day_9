@@ -114,6 +114,8 @@ void RPN::calculateExpression(char c)
 			_pile.push(a * b);
 			break;
 		case '/':
+			if (b == 0)
+				break;
 			_pile.push(a / b);
 			break;
 		default:
