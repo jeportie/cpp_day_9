@@ -19,8 +19,8 @@
 #include <iomanip>
 
 #include "PmergeMe.hpp"
-#include "../template/printContainer.tpp"
-#include "../template/fjsort.tpp"
+#include "../template/printContainer.hpp"
+#include "../template/fjsort.hpp"
 
 PmergeMe::PmergeMe(void)
 : _dataVector()
