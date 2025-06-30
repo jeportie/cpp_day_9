@@ -6,7 +6,7 @@
 /*   By: jeportie <jeportie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 14:35:38 by jeportie          #+#    #+#             */
-/*   Updated: 2025/06/17 11:37:50 by jeportie         ###   ########.fr       */
+/*   Updated: 2025/06/30 12:34:56 by jeportie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 #include <deque>
 #include <vector>
+
+typedef std::vector<int> IntVec;
 
 class PmergeMe
 {
@@ -37,5 +39,7 @@ private:
 	double				_timeVector;
 	double				_timeDeque;
 };
+
+void sort_vect(IntVec& container);
 
 #endif  // ***************************************************** PMERGEME_HPP //

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fjsort.tpp                                         :+:      :+:    :+:   */
+/*   fjsort.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeportie <jeportie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 11:37:15 by jeportie          #+#    #+#             */
-/*   Updated: 2025/06/17 15:30:52 by jeportie         ###   ########.fr       */
+/*   Updated: 2025/06/30 12:35:40 by jeportie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 #include <climits>
 
 #define PAIR_II std::pair<int, int>
-#define VPAIR_II std::vector<std::pair<int, int>>
+#define VPAIR_II std::vector<std::pair<int, int> >
 #define VECT_I std::vector<int>
 #define VECT_SIZE std::vector<size_t>
 
@@ -53,7 +53,6 @@ VPAIR_II sortInPairs(const Container& data)
     int                                first;
     int                                second;
 
-    // pairs.reserve(data.size() / 2 + 1); // approximation
     it = data.begin();
 
     while (it != data.end())
@@ -207,8 +206,6 @@ void fj_insert_smalls(Container&              out,
                       int                     oddValue)
 {
     out.clear();
-    // out.reserve(sorted_larges.size() + smalls.size() + (hasOdd?1:0));
-
     // 2a) seed with smallest small + all larges
     out.push_back(smalls[0]);
     for (typename Container::const_iterator it = sorted_larges.begin(); it != sorted_larges.end();
@@ -249,25 +246,19 @@ void fjsort(Container& container)
         oddValue = pairs.back().first;
         pairs.pop_back();
     }
-
     // 1b) Extract larges and smalls
     Container        larges;
     std::vector<int> smalls;
-    // larges.reserve(pairs.size());
-    // smalls.reserve(pairs.size());
     for (std::size_t i = 0; i < pairs.size(); ++i)
     {
         smalls.push_back(pairs[i].first);
         larges.push_back(pairs[i].second);
     }
-
     // 1c) Recurse on the larges
     fjsort(larges);
-
     // 1d) Build the final result
     Container sorted;
     fj_insert_smalls(sorted, larges, smalls, hasOdd, oddValue);
-
     // 1e) Replace
     container.swap(sorted);
 }

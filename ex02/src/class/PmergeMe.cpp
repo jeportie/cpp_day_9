@@ -6,7 +6,7 @@
 /*   By: jeportie <jeportie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 14:35:36 by jeportie          #+#    #+#             */
-/*   Updated: 2025/06/17 09:47:12 by jeportie         ###   ########.fr       */
+/*   Updated: 2025/06/30 12:34:38 by jeportie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void PmergeMe::runFordJohnson(void)
 	printContainer(_dataVector);
 
     gettimeofday(&startTime, NULL);
-    fjsort(_dataVector); 
+    sort_vect(_dataVector); 
     gettimeofday(&endTime, NULL);
     seconds = endTime.tv_sec - startTime.tv_sec;
     microseconds = endTime.tv_usec - startTime.tv_usec;
