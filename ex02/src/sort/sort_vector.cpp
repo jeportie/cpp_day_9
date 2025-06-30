@@ -72,7 +72,8 @@ static SizeVec generateInsertOrder(size_t n)
     while (true)
     {
         next = J[J.size()-1] + 2*J[J.size()-2];
-        if (next > n) break;
+        if (next > n)
+			break;
         J.push_back(next);
     }
     // For each J[k] ≤ n, insert indices J[k]-1 down to previous+1
@@ -102,29 +103,40 @@ static SizeVec generateInsertOrder(size_t n)
 }
 
 // 3) Insert each pending small value into 'out' by Jacobsthal order
-static void fj_insert_smalls(IntVec& out, const IntVec& sorted_larges,
-    const IntVec& smalls, bool hasOdd, int oddValue)
+static void insert_smalls(IntVec& out, const IntVec& sorted_larges, const IntVec& smalls, bool hasOdd, int oddValue)
 {
-    out.clear();
-    // 3a) seed: smallest small + all larges
-    out.push_back(smalls[0]);
-    for (size_t i = 0; i < sorted_larges.size(); ++i)
-        out.push_back(sorted_larges[i]);
+	size_t				i;
+	SizeVec				order;
+	SizeVec::size_type	j;
+	size_t				idx;
+	int					v;
+	IntVec::iterator	pos;
 
-    // 3b) insert the rest of smalls in Jacobsthal order
-    SizeVec order = generateInsertOrder(smalls.size()-1);
+    out.clear();
+    // 1) seed: smallest small + all larges
+    out.push_back(smalls[0]);
+	i = 0;
+    while (i < sorted_larges.size())
+	{
+        out.push_back(sorted_larges[i]);
+		++i;
+	}
+    // 2) insert the rest of smalls in Jacobsthal order
+    order = generateInsertOrder(smalls.size()-1);
     // pending = smalls[1..]
-    for (SizeVec::size_type i = 0; i < order.size(); ++i)
+	j = 0;
+    while (j < order.size())
     {
-        size_t idx = order[i];
-        int v = smalls[idx + 1];  // +1 because we seeded with smalls[0]
-        IntVec::iterator pos = binarySearch(out.begin(), out.end(), v);
+        idx = order[i];
+        v = smalls[idx + 1];  // +1 because we seeded with smalls[0]
+        pos = binarySearch(out.begin(), out.end(), v);
         out.insert(pos, v);
+		++j;
     }
-    // 3c) finally, if odd, insert that singleton
+    // 3) finally, if odd, insert that singleton
     if (hasOdd)
     {
-        IntVec::iterator pos = binarySearch(out.begin(), out.end(), oddValue);
+        pos = binarySearch(out.begin(), out.end(), oddValue);
         out.insert(pos, oddValue);
     }
 }
@@ -132,40 +144,41 @@ static void fj_insert_smalls(IntVec& out, const IntVec& sorted_larges,
 // The driver: fully recursive Ford–Johnson sort on vector<int>
 void sortVect(IntVec& container)
 {
+    PairList	pairs;
+    bool		hasOdd;
+    int			oddVal;
+    IntVec		smalls;
+	IntVec		larges;
+    IntVec		sorted;
+	size_t		i;
+
+	// recursion end gate
     if (container.size() < 2)
         return;
-
     // 1) Pair up & sort by their large half
-    PairList pairs = sortInPairs(container);
+    pairs = sortInPairs(container);
     std::sort(pairs.begin(), pairs.end(), compareByLarge);
-
     // 2) Detect & peel off odd sentinel
-    bool hasOdd = false;
-    int  oddVal = 0;
+    hasOdd = false;
+    oddVal = 0;
     if (!pairs.empty() && pairs.back().second == INT_MAX)
     {
         hasOdd = true;
-        oddVal  = pairs.back().first;
+        oddVal = pairs.back().first;
         pairs.pop_back();
     }
-
     // 3) Extract smalls[] and larges[]
-    IntVec smalls, larges;
-    smalls.reserve(pairs.size());
-    larges.reserve(pairs.size());
-    for (size_t i = 0; i < pairs.size(); ++i)
+	i = 0;
+    while (i < pairs.size())
     {
         smalls.push_back(pairs[i].first);
         larges.push_back(pairs[i].second);
+		++i;
     }
-
     // 4) Recurse on the larges
     sortVect(larges);
-
     // 5) Merge-insert the smalls back
-    IntVec sorted;
-    fj_insert_smalls(sorted, larges, smalls, hasOdd, oddVal);
-
+    insert_smalls(sorted, larges, smalls, hasOdd, oddVal);
     // 6) Replace original
     container.swap(sorted);
 }
