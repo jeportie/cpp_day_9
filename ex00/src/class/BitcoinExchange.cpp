@@ -104,7 +104,6 @@ float	BitcoinExchange::getClosestRate(const std::string &date) const
 	it = _container.lower_bound(date);
 	if (it != _container.end() && it->first == date)
 		return (it->second);
-	// std::cout << it->first << std::endl;
 	if (it == _container.begin())
 		return (it->second);
 	--it;

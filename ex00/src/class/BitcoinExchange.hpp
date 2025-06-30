@@ -20,30 +20,29 @@
 class BitcoinExchange
 {
 public:
-	BitcoinExchange();
-	BitcoinExchange(const BitcoinExchange& src);
-	~BitcoinExchange(void);
+    BitcoinExchange();
+    BitcoinExchange(const BitcoinExchange& src);
+    ~BitcoinExchange(void);
 
-	BitcoinExchange& operator=(const BitcoinExchange& rhs);
+    BitcoinExchange& operator=(const BitcoinExchange& rhs);
 
-	void	processFile(void);
-	void	parseLine(std::string line);
-	bool	checkValidDate(const std::string& date);
-	float	parseRate(const std::string& rate);
+    void  processFile(void);
+    void  parseLine(std::string line);
+    bool  checkValidDate(const std::string& date);
+    float parseRate(const std::string& rate);
 
-	float	getClosestRate(const std::string &date) const;
-	void	printMap(void) const;
+    float getClosestRate(const std::string& date) const;
+    void  printMap(void) const;
 
-	const std::string& getDbPath(void);
+    const std::string& getDbPath(void);
 
 
 private:
-	std::string						_dbPath;
-	std::map<std::string, float>	_container;
+    std::string                  _dbPath;
+    std::map<std::string, float> _container;
 };
 
-
 // Overload operator<< for output streaming
-std::ostream & operator<<(std::ostream& out, const BitcoinExchange& in);
+std::ostream& operator<<(std::ostream& out, const BitcoinExchange& in);
 
 #endif  // ********************************************** BITCOINEXCHANGE_HPP //
