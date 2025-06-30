@@ -24,6 +24,7 @@ ARGS=$(filter-out $@,$(MAKECMDGOALS))
 # List of source files:
 SRC = \
   src/class/PmergeMe.cpp \
+  src/sort/sort_deque.cpp \
   src/sort/sort_vector.cpp 
 #### END AUTO GENERATED FILES ###
 

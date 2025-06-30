@@ -20,7 +20,6 @@
 
 #include "PmergeMe.hpp"
 #include "../template/printContainer.hpp"
-#include "../template/fjsort.hpp"
 
 PmergeMe::PmergeMe(void)
 : _dataVector()
@@ -93,7 +92,7 @@ void PmergeMe::runFordJohnson(void)
 	printContainer(_dataVector);
 
     gettimeofday(&startTime, NULL);
-    sort_vect(_dataVector); 
+    sortVect(_dataVector); 
     gettimeofday(&endTime, NULL);
     seconds = endTime.tv_sec - startTime.tv_sec;
     microseconds = endTime.tv_usec - startTime.tv_usec;
@@ -103,7 +102,7 @@ void PmergeMe::runFordJohnson(void)
 	printContainer(_dataVector);
 
     gettimeofday(&startTime, NULL);
-    fjsort(_dataDeque); 
+    sortDeque(_dataDeque); 
     gettimeofday(&endTime, NULL);
     seconds = endTime.tv_sec - startTime.tv_sec;
     microseconds = endTime.tv_usec - startTime.tv_usec;

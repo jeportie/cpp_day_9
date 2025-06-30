@@ -10,6 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef BINARYSEARCH_TPP
+# define BINARYSEARCH_TPP
+
+#include <iterator>
+
 // Standard binary‐search insertion point in [begin,end)
 template<typename Iter>
 Iter binarySearch(Iter begin, Iter end, const int& value)
@@ -25,3 +30,5 @@ Iter binarySearch(Iter begin, Iter end, const int& value)
     }
     return left;
 }
+
+#endif  // ************************************************* BINARYSEARCH_TPP //
