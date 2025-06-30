@@ -23,17 +23,20 @@ typedef std::vector<PairII>       PairList;
 typedef std::vector<int>          IntVec;
 typedef std::vector<size_t>       SizeVec;
 
-// 1) Split into (small,large) pairs; if odd, large=INT_MAX
 static PairList sortInPairs(const IntVec& data)
 {
-    PairList pairs;
-    pairs.reserve(data.size()/2 + 1);
-    for (size_t i = 0; i < data.size(); )
+    PairList	pairs;
+	size_t		i;
+	int			a;
+	int			b;
+
+	i = 0;
+    while (i < data.size())
     {
-        int a = data[i++];
+        a = data[i++];
         if (i < data.size())
         {
-            int b = data[i++];
+            b = data[i++];
             if (a > b) std::swap(a,b);
             pairs.push_back(PairII(a,b));
         }
@@ -42,43 +45,59 @@ static PairList sortInPairs(const IntVec& data)
             pairs.push_back(PairII(a, INT_MAX));
         }
     }
-    return pairs;
+    return (pairs);
 }
 
 // Compare by the 'large' element
 static bool compareByLarge(const PairII& A, const PairII& B)
 {
-    return A.second < B.second;
+    return (A.second < B.second);
 }
 
 // 2) Generate Jacobsthal‐order insertion indices  for n smalls
 static SizeVec generateInsertOrder(size_t n)
 {
     SizeVec order;
-    if (n <= 1) return order;
+    SizeVec J;
+	size_t	next;
+    size_t	covered;
+	size_t	i;
+	size_t	k;
+	size_t	lim;
 
+    if (n <= 1) return order;
     // Build Jacobsthal numbers J(2)=3, J(3)=5, J(k)=J(k-1)+2*J(k-2)
-    SizeVec J; J.push_back(3); J.push_back(5);
+	J.push_back(3);
+	J.push_back(5);
     while (true)
     {
-        size_t next = J[J.size()-1] + 2*J[J.size()-2];
+        next = J[J.size()-1] + 2*J[J.size()-2];
         if (next > n) break;
         J.push_back(next);
     }
-
     // For each J[k] ≤ n, insert indices J[k]-1 down to previous+1
-    size_t covered=0;
-    for (size_t k=0; k < J.size() && J[k] <= n; ++k)
+    covered = 0;
+	k = 0;
+    while (k < J.size() && J[k] <= n)
     {
-        size_t lim = J[k] - 1;
-        for (size_t i = lim; i > covered; --i)
+        lim = J[k] - 1;
+		i = lim;
+		while (i > covered)
+		{
             order.push_back(i);
+			--i;
+		}
         covered = lim;
+		++k;
     }
     // Fill in any remaining
-    for (size_t i = 0; i < n; ++i)
+	i = 0;
+    while (i < n)
+	{
         if (std::find(order.begin(), order.end(), i) == order.end())
             order.push_back(i);
+		++i;
+	}
     return order;
 }
 

@@ -17,7 +17,7 @@
 #include <vector>
 
 typedef std::vector<int> IntVec;
-typedef std::deque<int> IntDec;
+typedef std::deque<int> IntDeq;
 
 class PmergeMe
 {
@@ -42,6 +42,6 @@ private:
 };
 
 void sortVect(IntVec& container);
-void sortDeque(IntDec& container);
+void sortDeque(IntDeq& container);
 
 #endif  // ***************************************************** PMERGEME_HPP //

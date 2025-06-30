@@ -20,11 +20,11 @@
 
 typedef std::pair<int,int>        PairII;
 typedef std::deque<PairII>       PairList;
-typedef std::deque<int>          IntDec;
+typedef std::deque<int>          IntDeq;
 typedef std::deque<size_t>       SizeVec;
 
 // 1) Split into (small,large) pairs; if odd, large=INT_MAX
-static PairList sortInPairs(const IntDec& data)
+static PairList sortInPairs(const IntDeq& data)
 {
     PairList pairs;
     for (size_t i = 0; i < data.size(); )
@@ -82,8 +82,8 @@ static SizeVec generateInsertOrder(size_t n)
 }
 
 // 3) Insert each pending small value into 'out' by Jacobsthal order
-static void fj_insert_smalls(IntDec& out, const IntDec& sorted_larges,
-    const IntDec& smalls, bool hasOdd, int oddValue)
+static void fj_insert_smalls(IntDeq& out, const IntDeq& sorted_larges,
+    const IntDeq& smalls, bool hasOdd, int oddValue)
 {
     out.clear();
     // 3a) seed: smallest small + all larges
@@ -98,19 +98,19 @@ static void fj_insert_smalls(IntDec& out, const IntDec& sorted_larges,
     {
         size_t idx = order[i];
         int v = smalls[idx + 1];  // +1 because we seeded with smalls[0]
-        IntDec::iterator pos = binarySearch(out.begin(), out.end(), v);
+        IntDeq::iterator pos = binarySearch(out.begin(), out.end(), v);
         out.insert(pos, v);
     }
     // 3c) finally, if odd, insert that singleton
     if (hasOdd)
     {
-        IntDec::iterator pos = binarySearch(out.begin(), out.end(), oddValue);
+        IntDeq::iterator pos = binarySearch(out.begin(), out.end(), oddValue);
         out.insert(pos, oddValue);
     }
 }
 
 // The driver: fully recursive Ford–Johnson sort on deque<int>
-void sortDeque(IntDec& container)
+void sortDeque(IntDeq& container)
 {
     if (container.size() < 2)
         return;
@@ -130,7 +130,7 @@ void sortDeque(IntDec& container)
     }
 
     // 3) Extract smalls[] and larges[]
-    IntDec smalls, larges;
+    IntDeq smalls, larges;
     for (size_t i = 0; i < pairs.size(); ++i)
     {
         smalls.push_back(pairs[i].first);
@@ -141,7 +141,7 @@ void sortDeque(IntDec& container)
     sortDeque(larges);
 
     // 5) Merge-insert the smalls back
-    IntDec sorted;
+    IntDeq sorted;
     fj_insert_smalls(sorted, larges, smalls, hasOdd, oddVal);
 
     // 6) Replace original
