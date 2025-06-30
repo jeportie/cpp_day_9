@@ -118,7 +118,7 @@ static void insert_smalls(IntVec& out, const IntVec& sorted_larges, const IntVec
 	j = 0;
     while (j < order.size())
     {
-        idx = order[i];
+        idx = order[j];
         v = smalls[idx + 1];
         pos = binarySearch(out.begin(), out.end(), v);
         out.insert(pos, v);
