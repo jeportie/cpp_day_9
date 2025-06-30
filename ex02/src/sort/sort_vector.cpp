@@ -12,11 +12,13 @@
 
 #include <cstddef>
 #include <algorithm>
+#include <iostream>
 #include <utility>
 #include <vector>
 #include <climits>
 
 #include "../template/binarySearch.hpp"
+#include "../template/printContainer.hpp"
 
 typedef std::pair<int,int>        PairII;
 typedef std::vector<PairII>       PairList;
@@ -63,9 +65,10 @@ static SizeVec generateInsertOrder(size_t n)
 	size_t	k;
 	size_t	lim;
 
-    if (n <= 1) return order;
+    if (n == 0)
+		return order;
+	J.push_back(1);
 	J.push_back(3);
-	J.push_back(5);
     while (true)
     {
         next = J[J.size()-1] + 2*J[J.size()-2];
@@ -144,7 +147,6 @@ void sortVect(IntVec& container)
 	// recursion end gate
     if (container.size() < 2)
         return;
-    // 1) Pair up & sort by their large half
     pairs = sortInPairs(container);
     std::sort(pairs.begin(), pairs.end(), compareByLarge);
     // 2) Detect & peel off odd sentinel

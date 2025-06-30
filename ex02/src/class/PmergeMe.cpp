@@ -112,7 +112,7 @@ void PmergeMe::runFordJohnson(void)
     std::cout	<< "Time to process a range of: " << _dataVector.size() 
 				<< " Vector elements: " << std::fixed << std::setprecision(5)
 				<< _timeVector << " us" << std::endl;
-    std::cout	<< "Time to process a range of: " << _dataVector.size() 
+    std::cout	<< "Time to process a range of: " << _dataDeque.size() 
 				<< " Deque  elements: " << std::fixed << std::setprecision(5)
 				<< _timeDeque << " us" << std::endl;
 }

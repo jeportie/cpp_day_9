@@ -63,9 +63,9 @@ static SizeDeq generateInsertOrder(size_t n)
 	size_t	k;
 	size_t	lim;
 
-    if (n <= 1) return order;
+    if (n == 0) return order;
+	J.push_back(1);
 	J.push_back(3);
-	J.push_back(5);
     while (true)
     {
         next = J[J.size()-1] + 2*J[J.size()-2];
