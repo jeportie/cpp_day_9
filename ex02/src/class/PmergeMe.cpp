@@ -50,7 +50,46 @@ PmergeMe & PmergeMe::operator=(const PmergeMe& rhs)
 	return (*this);
 }
 
-void PmergeMe::validateArg(char *av)
+void PmergeMe::checkDuplicates() const
+{
+    // declarations up front
+    size_t i;
+    size_t j;
+    size_t vecSize;
+    size_t deqSize;
+
+    // 1) Check _dataVector for duplicates
+    vecSize = _dataVector.size();
+    i = 0;
+    while (i + 1 < vecSize)
+    {
+        j = i + 1;
+        while (j < vecSize)
+        {
+            if (_dataVector[i] == _dataVector[j])
+                throw std::invalid_argument("doubles not allowed");
+            ++j;
+        }
+        ++i;
+    }
+
+    // 2) Check _dataDeque for duplicates
+    deqSize = _dataDeque.size();
+    i = 0;
+    while (i + 1 < deqSize)
+    {
+        j = i + 1;
+        while (j < deqSize)
+        {
+            if (_dataDeque[i] == _dataDeque[j])
+                throw std::invalid_argument("doubles not allowed");
+            ++j;
+        }
+        ++i;
+    }
+}
+
+void PmergeMe::validateArg(char *av) const
 {
 	int	i;
 

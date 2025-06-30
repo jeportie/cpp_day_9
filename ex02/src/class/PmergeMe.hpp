@@ -29,7 +29,8 @@ public:
     PmergeMe& operator=(const PmergeMe& rhs);
 
 	void parseAndPush(char *av);
-	void validateArg(char *av);
+	void validateArg(char *av) const;
+    void checkDuplicates() const;
 	void runFordJohnson(void);
 
 

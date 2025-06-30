@@ -32,6 +32,7 @@ int main(int ac, char **av)
 			setup.parseAndPush(av[i]);
 			i++;
 		}
+		setup.checkDuplicates();
 		setup.runFordJohnson();
 	}
 	catch (const std::invalid_argument& e)
