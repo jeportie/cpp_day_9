@@ -12,13 +12,11 @@
 
 #include <cstddef>
 #include <algorithm>
-#include <iostream>
 #include <utility>
 #include <vector>
 #include <climits>
 
 #include "../template/binarySearch.hpp"
-#include "../template/printContainer.hpp"
 
 typedef std::pair<int,int>        PairII;
 typedef std::vector<PairII>       PairList;
@@ -55,49 +53,72 @@ static bool compareByLarge(const PairII& A, const PairII& B)
     return (A.second < B.second);
 }
 
-static SizeVec generateInsertOrder(size_t n)
+static SizeVec generateJacobsthalNumbers(size_t maxValue)
 {
-    SizeVec order;
-    SizeVec J;
-	size_t	next;
-    size_t	covered;
-	size_t	i;
-	size_t	k;
-	size_t	lim;
+    SizeVec jcbSeq;
+	size_t	nextJacobsthal;
+	int		size;
 
-    if (n == 0)
-		return order;
-	J.push_back(1);
-	J.push_back(3);
+    jcbSeq.push_back(1);
+    jcbSeq.push_back(3);
     while (true)
     {
-        next = J[J.size()-1] + 2*J[J.size()-2];
-        if (next > n)
-			break;
-        J.push_back(next);
+		size = jcbSeq.size();	
+        nextJacobsthal = jcbSeq[ size -1 ] + 2 * jcbSeq[ size - 2 ];
+        // nextJacobsthal = jcbSeq[jcbSeq.size()-1] + 2*jcbSeq[jcbSeq.size()-2];
+        if (nextJacobsthal > maxValue)
+            break;
+        jcbSeq.push_back(nextJacobsthal);
     }
-    covered = 0;
-	k = 0;
-    while (k < J.size() && J[k] <= n)
+    return (jcbSeq);
+}
+
+static SizeVec generateInsertOrder(size_t n)
+{
+    SizeVec insrtOrder;
+    SizeVec jcbNbrs;
+	size_t	lastProcessedIndex;
+	size_t	currentIndex;
+	size_t	jcbIdx;
+	size_t	rangeEnd;
+
+	std::vector<bool> added(n, false);
+
+    if (n == 0)
+		return insrtOrder;
+
+    jcbNbrs = generateJacobsthalNumbers(n);
+    lastProcessedIndex = 0;
+	jcbIdx = 0;
+
+    while (jcbIdx < jcbNbrs.size() && jcbNbrs[jcbIdx] <= n)
     {
-        lim = J[k] - 1;
-		i = lim;
-		while (i > covered)
+        rangeEnd = jcbNbrs[jcbIdx] - 1;
+		currentIndex = rangeEnd;
+
+		while (currentIndex > lastProcessedIndex)
 		{
-            order.push_back(i);
-			--i;
+			if (added[currentIndex])
+			{
+				insrtOrder.push_back(currentIndex);
+				added[currentIndex] = true;
+			}
+			--currentIndex;
 		}
-        covered = lim;
-		++k;
+        lastProcessedIndex = rangeEnd;
+		++jcbIdx;
     }
-	i = 0;
-    while (i < n)
+	currentIndex = 0;
+    while (currentIndex < n)
 	{
-        if (std::find(order.begin(), order.end(), i) == order.end())
-            order.push_back(i);
-		++i;
+        if (!added[currentIndex])
+		{
+            insrtOrder.push_back(currentIndex);
+			added[currentIndex] = true;
+		}
+		++currentIndex;
 	}
-    return order;
+    return (insrtOrder);
 }
 
 static void insert_smalls(IntVec& out, const IntVec& sorted_larges, const IntVec& smalls, bool hasOdd, int oddValue)
